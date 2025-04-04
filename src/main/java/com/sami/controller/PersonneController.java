@@ -1,9 +1,12 @@
 package com.sami.controller;
 
 import com.sami.model.Personne;
-import com.sami.repository.PersonneRepository;
+import com.sami.model.Vehicule;
 import com.sami.service.PersonneService;
+import com.sami.service.VehiculeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -13,6 +16,8 @@ public class PersonneController {
 
     @Autowired
     private PersonneService personneService;
+    @Autowired
+    private VehiculeService vehiculeService;
 
     @GetMapping("/")
     public String home() {
@@ -64,4 +69,52 @@ public class PersonneController {
     public void deletePersonne(@PathVariable("id") int id) {
         personneService.deletePersonne(id);
     }
+
+    @PostMapping("/personne/{personneId}/vehicule/{vehiculeId}")
+    public ResponseEntity<?> associerVehiculeAPersonne(@PathVariable int personneId, @PathVariable int vehiculeId) {
+        Optional<Personne> personneOptional = personneService.getPersonne(personneId);
+        Optional<Vehicule> vehiculeOptional = vehiculeService.getVehicule(vehiculeId);
+
+        if (personneOptional.isEmpty() || vehiculeOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Personne ou Véhicule non trouvé.");
+        }
+
+        Personne personne = personneOptional.get();
+        Vehicule vehicule = vehiculeOptional.get();
+
+        personne.getVehicules().add(vehicule);
+        vehicule.getPersonnes().add(personne);
+
+        personneService.savePersonne(personne);
+        vehiculeService.saveVehicule(vehicule);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Véhicule associé à la personne.");
+    }
+    @DeleteMapping("/personne/{personneId}/vehicule/{vehiculeId}")
+    public ResponseEntity<?> removeVehiculeFromPersonne(@PathVariable("personneId") int personneId, @PathVariable("vehiculeId") int vehiculeId) {
+        Optional<Personne> personneOptional = personneService.getPersonne(personneId);
+        if (personneOptional.isPresent()) {
+            Personne personne = personneOptional.get();
+            Optional<Vehicule> vehiculeOptional = vehiculeService.getVehicule(vehiculeId);
+
+            if (vehiculeOptional.isPresent()) {
+                Vehicule vehicule = vehiculeOptional.get();
+                
+                personne.getVehicules().remove(vehicule);
+
+                vehicule.getPersonnes().remove(personne);
+
+                personneService.savePersonne(personne);
+                vehiculeService.saveVehicule(vehicule);
+
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vehicule not found");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Personne not found");
+        }
+    }
+
+
 }
