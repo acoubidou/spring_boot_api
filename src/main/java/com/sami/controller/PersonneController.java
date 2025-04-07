@@ -99,7 +99,7 @@ public class PersonneController {
 
             if (vehiculeOptional.isPresent()) {
                 Vehicule vehicule = vehiculeOptional.get();
-                
+
                 personne.getVehicules().remove(vehicule);
 
                 vehicule.getPersonnes().remove(personne);
