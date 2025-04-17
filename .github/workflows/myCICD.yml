@@ -30,3 +30,17 @@ jobs:
           name: package
           path: target/*.jar
           retention-days: 1
+
+  Discord:
+    name: Discord
+    runs-on: ubuntu-latest
+    needs: build-projet
+
+    steps:
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK8TOKEN }}
+        uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          description: 'The project has been deployed'
