@@ -53,7 +53,7 @@ jobs:
         with:
           title: '🛠️ Build ${{ job.status }}'
           description: |
-            📦 Projet compilé depuis `${{ github.repository }}` par `${{ github.actor }}` !
+            📦 Projet compilé depuis `${{ github.repository }}` par `${{ github.actor }}` !!
             🔁 Commit: `${{ github.sha }}`
             🌿 Branch: `${{ github.ref_name }}`
           color: ${{ job.status == 'success' && '0x00FF00' || '0xFF0000' }}
