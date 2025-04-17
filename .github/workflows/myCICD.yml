@@ -19,6 +19,12 @@ jobs:
             java-version: '21'
             distribution: 'zulu'
 
+      - name: Start MySql # demarrage du service mysql
+        run: sudo service mysql start
+
+      - name: Create Database from script
+        run: mysql -u${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} -e "dump/autopro.sql"
+
       - name: Build projet
         run: mvn -B verify
 
@@ -51,53 +57,3 @@ jobs:
           color: ${{ job.status == 'success' && '0x00FF00' || '0xFF0000' }}
           username: 'CI/CD Notifier'
           avatar_url: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
-          
-  Teams:
-    name: Microsoft Teams
-    runs-on: ubuntu-latest
-    needs: build-projet
-    if: always()
-
-    steps:
-      - name: Send Teams notification
-        run: |
-          curl -H 'Content-Type: application/json' -d '{
-            "@type": "MessageCard",
-            "@context": "http://schema.org/extensions",
-            "summary": "CI/CD Notification",
-            "themeColor": "${{ job.status == 'success' && '00FF00' || 'FF0000' }}",
-            "title": "🚀 Build Status: ${{ job.status == 'success' && '✅ Success' || '❌ Failed' }}",
-            "sections": [
-              {
-                "activityTitle": "**CI/CD Build Summary**",
-                "facts": [
-                  {
-                    "name": "Repository:",
-                    "value": "${{ github.repository }}"
-                  },
-                  {
-                    "name": "Branch:",
-                    "value": "${{ github.ref_name }}"
-                  },
-                  {
-                    "name": "Commit SHA:",
-                    "value": "${{ github.sha }}"
-                  },
-                  {
-                    "name": "Author:",
-                    "value": "${{ github.actor }}"
-                  }
-                ],
-                "markdown": true
-              }
-            ],
-            "potentialAction": [
-              {
-                "@type": "OpenUri",
-                "name": "🔍 View Commit",
-                "targets": [
-                  { "os": "default", "uri": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}" }
-                ]
-              }
-            ]
-          }' ${{ secrets.TEAMS_WEBHOOK_URL }}

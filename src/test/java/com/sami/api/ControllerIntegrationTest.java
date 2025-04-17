@@ -15,20 +15,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class ControllerIntegrationTest {
 
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    @Test
-//    public void getPersonnesTest() throws Exception {
-//        mockMvc.perform(get("/personnes"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$[0].personne_nom", is("Jules le M")));
-//    }
-//
-//    @Test
-//    public void getVehiculesTest() throws Exception {
-//        mockMvc.perform(get("/vehicules"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$[0].vehicule_marque", is("Volkswagen")));
-//    }
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    public void getPersonnesTest() throws Exception {
+        mockMvc.perform(get("/personnes"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].personne_nom", is("Jules le M")));
+    }
+
+    @Test
+    public void getVehiculesTest() throws Exception {
+        mockMvc.perform(get("/vehicules"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].vehicule_marque", is("Volkswagen")));
+    }
 }
