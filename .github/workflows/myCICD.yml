@@ -53,6 +53,7 @@ jobs:
         uses: sarisia/actions-status-discord@v1
         if: always()
         with:
+          content: "Hey <@530816055698784276>"
           title: '🛠️ Build ${{ job.status }}'
           description: |
             📦 Projet compilé depuis `${{ github.repository }}` par `${{ github.actor }}` !!
