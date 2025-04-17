@@ -39,7 +39,7 @@ jobs:
     steps:
       - name: Discord notification
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK8TOKEN }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
         uses: sarisia/actions-status-discord@v1
         if: always()
         with:
