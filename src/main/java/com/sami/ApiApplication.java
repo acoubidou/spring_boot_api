@@ -1,4 +1,4 @@
-package com.sami.api;
+package com.sami;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
