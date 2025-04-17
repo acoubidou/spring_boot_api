@@ -48,7 +48,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
         uses: sarisia/actions-status-discord@v1
-        if: always()
+        if: failure()
         with:
           title: '🛠️ Build ${{ job.status }}'
           description: |
