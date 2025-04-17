@@ -31,6 +31,15 @@ jobs:
           path: target/*.jar
           retention-days: 1
 
+      - name: Send SMS with Twilio
+        uses: timmybytes/twilio-action@v1.0
+        with:
+          account-sid: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          auth-token: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          from-number: ${{ secrets.TWILIO_PHONE_NUMBER }}
+          to-number: ${{ secrets.TO_PHONE_NUMBER }}
+          body: "Build Status: ${{ job.status }} - Commit: ${{ github.sha }} - Branch: ${{ github.ref_name }}"
+
   Discord:
     name: Discord
     runs-on: ubuntu-latest
