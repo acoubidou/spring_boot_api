@@ -1,3 +1,6 @@
+
+
+DROP TABLE IF EXISTS `personne`;
 CREATE TABLE IF NOT EXISTS `personne` (
   `personne_id` int NOT NULL AUTO_INCREMENT,
   `personne_nom` varchar(255) DEFAULT NULL,
@@ -5,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `personne` (
   PRIMARY KEY (`personne_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+DROP TABLE IF EXISTS `personne_vehicule`;
 CREATE TABLE IF NOT EXISTS `personne_vehicule` (
   `personne_id` int NOT NULL,
   `vehicule_id` int NOT NULL,
@@ -12,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `personne_vehicule` (
   KEY `vehicule_id` (`vehicule_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+DROP TABLE IF EXISTS `vehicule`;
 CREATE TABLE IF NOT EXISTS `vehicule` (
   `vehicule_id` int NOT NULL AUTO_INCREMENT,
   `vehicule_marque` varchar(255) DEFAULT NULL,
