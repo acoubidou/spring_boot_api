@@ -4,7 +4,6 @@ on: [push]
 jobs:
   build-projet:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -48,7 +47,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
         uses: sarisia/actions-status-discord@v1
-        if: failure()
+        if: always()
         with:
           title: '🛠️ Build ${{ job.status }}'
           description: |
