@@ -31,16 +31,6 @@ jobs:
           path: target/*.jar
           retention-days: 1
 
-      - name: Send WhatsApp message with Twilio
-        run: |
-          curl 'https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json' -X POST \
-          --data-urlencode "To=whatsapp:${{ secrets.TO_PHONE_NUMBER }}" \
-          --data-urlencode "From=whatsapp:${{ secrets.TWILIO_PHONE_NUMBER }}" \
-          --data-urlencode "ContentSid=${{ secrets.TWILIO_CONTENT_SID }}" \
-          --data-urlencode "ContentVariables={\"1\":\"12/1\",\"2\":\"3pm\"}" \
-          -u ${{ secrets.TWILIO_ACCOUNT_SID }}:${{ secrets.TWILIO_AUTH_TOKEN }}
-  
-
   Discord:
     name: Discord
     runs-on: ubuntu-latest
@@ -62,3 +52,52 @@ jobs:
           username: 'CI/CD Notifier'
           avatar_url: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
           
+  Teams:
+    name: Microsoft Teams
+    runs-on: ubuntu-latest
+    needs: build-projet
+    if: always()
+
+    steps:
+      - name: Send Teams notification
+        run: |
+          curl -H 'Content-Type: application/json' -d '{
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "summary": "CI/CD Notification",
+            "themeColor": "${{ job.status == 'success' && '00FF00' || 'FF0000' }}",
+            "title": "🚀 Build Status: ${{ job.status == 'success' && '✅ Success' || '❌ Failed' }}",
+            "sections": [
+              {
+                "activityTitle": "**CI/CD Build Summary**",
+                "facts": [
+                  {
+                    "name": "Repository:",
+                    "value": "${{ github.repository }}"
+                  },
+                  {
+                    "name": "Branch:",
+                    "value": "${{ github.ref_name }}"
+                  },
+                  {
+                    "name": "Commit SHA:",
+                    "value": "${{ github.sha }}"
+                  },
+                  {
+                    "name": "Author:",
+                    "value": "${{ github.actor }}"
+                  }
+                ],
+                "markdown": true
+              }
+            ],
+            "potentialAction": [
+              {
+                "@type": "OpenUri",
+                "name": "🔍 View Commit",
+                "targets": [
+                  { "os": "default", "uri": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}" }
+                ]
+              }
+            ]
+          }' ${{ secrets.TEAMS_WEBHOOK_URL }}
