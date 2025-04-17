@@ -1,4 +1,8 @@
+-- Créer la base de données si elle n'existe pas
+CREATE DATABASE IF NOT EXISTS autopro;
 
+-- Sélectionner la base de données
+USE autopro;
 
 DROP TABLE IF EXISTS `personne`;
 CREATE TABLE IF NOT EXISTS `personne` (
