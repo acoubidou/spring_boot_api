@@ -22,4 +22,4 @@ jobs:
       - name: Build projet
         run: mvn -B verify
 
-      - run: echo "This job's status is ${{ job.status }}
+      - run: echo "This job's status is ${{ job.status }}"
