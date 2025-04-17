@@ -31,13 +31,15 @@ jobs:
           path: target/*.jar
           retention-days: 1
 
-      - name: Send SMS with Twilio
+      - name: Send WhatsApp message with Twilio
         run: |
-          curl -X POST https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json \
-          --data-urlencode "To=${{ secrets.TO_PHONE_NUMBER }}" \
-          --data-urlencode "From=${{ secrets.TWILIO_PHONE_NUMBER }}" \
-          --data-urlencode "Body=Build Status: ${{ job.status }} - Commit: ${{ github.sha }} - Branch: ${{ github.ref_name }}" \
+          curl 'https://api.twilio.com/2010-04-01/Accounts/${{ secrets.TWILIO_ACCOUNT_SID }}/Messages.json' -X POST \
+          --data-urlencode "To=whatsapp:${{ secrets.TO_PHONE_NUMBER }}" \
+          --data-urlencode "From=whatsapp:${{ secrets.TWILIO_PHONE_NUMBER }}" \
+          --data-urlencode "ContentSid=${{ secrets.TWILIO_CONTENT_SID }}" \
+          --data-urlencode "ContentVariables={\"1\":\"12/1\",\"2\":\"3pm\"}" \
           -u ${{ secrets.TWILIO_ACCOUNT_SID }}:${{ secrets.TWILIO_AUTH_TOKEN }}
+  
 
   Discord:
     name: Discord
