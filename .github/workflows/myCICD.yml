@@ -44,7 +44,10 @@ jobs:
         if: always()
         with:
           title: '🛠️ Build ${{ job.status }}'
-          description: '📦 Projet compilé depuis `${{ github.repository }}` par `${{ github.actor }}`\n🔁 Commit: `${{ github.sha }}`\n🌿 Branch: `${{ github.ref_name }}`'
+          description: |
+            📦 Projet compilé depuis `${{ github.repository }}` par `${{ github.actor }}`
+            🔁 Commit: `${{ github.sha }}`
+            🌿 Branch: `${{ github.ref_name }}`
           color: ${{ job.status == 'success' && '0x00FF00' || '0xFF0000' }}
           username: 'CI/CD Notifier'
           avatar_url: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
