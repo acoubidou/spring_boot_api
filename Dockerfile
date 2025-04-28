@@ -2,7 +2,7 @@ FROM openjdk:21
 
 ENV APP_HOME=/app
 
-ENV SPRING_DATASOURCE_URL=jdbc:mysql://mysql_server:3306/springboot
+ENV SPRING_DATASOURCE_URL=jdbc:mysql://mysql_server:3306/autopro
 
 ENV SPRING_DATASOURCE_USERNAME=root
 ENV SPRING_DATASOURCE_PASSWORD=root
